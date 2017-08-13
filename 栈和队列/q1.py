@@ -15,7 +15,7 @@ class MyStack:
         if length == 0:
             self.minstack.append(value)
         else:
-            if value <= self.minstack[length-1]:
+            if value <= self.minstack[-1]:
                 self.minstack.append(value)
 
         self.datastack.append(value)
@@ -31,8 +31,7 @@ class MyStack:
     def get_min(self):
         if len(self.datastack) == 0:
             raise RuntimeError('the stack is empty')
-        length = len(self.minstack)
-        return self.minstack[length-1]
+        return self.minstack[-1]
 
 
 if __name__ == '__main__':
