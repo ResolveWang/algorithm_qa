@@ -14,7 +14,7 @@ it will move 8 steps
 
 要求：
 1）使用递归的方案
-2）使用栈来模拟汉诺塔的三个塔
+2）非递归的方法，使用栈来模拟汉诺塔的三个塔
 
 思路：
 a)将1~(N-1)层塔先全部从左移动到右，递归过程
@@ -54,6 +54,60 @@ class RecursiveWay:
 
             return total
 
+
+import sys
+
+class MoveDetail:
+    MoveNone = 0
+    L2M = 1
+    M2L = 3
+    M2R = 2
+    R2M = 4
+
+
+class StackHannota:
+    left = list()
+    mid = list()
+    right = list()
+
+    left.append(sys.maxsize)
+    mid.append(sys.maxsize)
+    right.append(sys.maxsize)
+
+    left_side = 'left'
+    mid_side = 'mid'
+    right_side = 'right'
+
+    steps = 0
+
+    lastmove = MoveDetail.MoveNone
+
+    @classmethod
+    def move(cls):
+        n = len(cls.left)-1
+        if n == 0:
+            return 0
+        if n == 1:
+            print('move {} from {} to {}'.format(n, 'left', 'mid'))
+            print('move {} from {} to {}'.format(n, 'mid', 'right'))
+            return 2
+        while len(cls.left) > 1 or len(cls.mid) > 1:
+            cls.process(cls.lastmove, MoveDetail.L2M, cls.left_side, cls.mid_side, cls.left, cls.mid)
+            cls.process(cls.lastmove, MoveDetail.M2L, cls.mid_side, cls.left_side, cls.mid, cls.left)
+            cls.process(cls.lastmove, MoveDetail.M2R, cls.mid_side, cls.right_side, cls.mid, cls.right)
+            cls.process(cls.lastmove, MoveDetail.R2M, cls.right_side, cls.mid_side, cls.right, cls.mid)
+
+    @classmethod
+    def process(cls, lastmove, curmove, efrom, eto, fstack, tstack):
+        if fstack[-1] < tstack[-1] and abs(lastmove-curmove) != 2:
+            i = fstack.pop()
+            print('move {} from {} to {}'.format(i, efrom, eto))
+            tstack.append(i)
+            cls.steps += 1
+            cls.lastmove = curmove
+        return
+
+
 if __name__ == '__main__':
     n1 = 2
     n2 = 4
@@ -61,5 +115,7 @@ if __name__ == '__main__':
     steps = RecursiveWay.move(n1, RecursiveWay.left, RecursiveWay.mid, RecursiveWay.right)
     print('total steps is {}'.format(steps))
     print('*********************************')
-    steps = RecursiveWay.move(n2, RecursiveWay.left, RecursiveWay.mid, RecursiveWay.right)
-    print('total steps is {}'.format(steps))
+    for i in reversed(range(1, n2+1)):
+        StackHannota.left.append(i)
+    StackHannota.move()
+    print('total steps is {}'.format(StackHannota.steps))
