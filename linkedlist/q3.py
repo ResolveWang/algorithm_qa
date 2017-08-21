@@ -17,6 +17,10 @@
 如果r大于1，不删除任何节点。
 """
 
+import math
+
+from linkedlist.toolcls import PrintMixin
+
 
 class Node:
     def __init__(self, value):
@@ -24,14 +28,7 @@ class Node:
         self.next = None
 
 
-class RemoveNode:
-    @classmethod
-    def print_linkedlist(cls, head):
-        while head is not None:
-            print(head.value, end=' ')
-            head = head.next
-        print()
-
+class RemoveNode(PrintMixin):
     @classmethod
     def remove_mid_node(cls, head):
         if head is None or head.next is None:
@@ -51,6 +48,35 @@ class RemoveNode:
 
         return head
 
+    @classmethod
+    def remove_k_node(cls, head, a, b):
+        if b == 0:
+            raise RuntimeError('b can"t be 0')
+        if head is None or a > b or a == 0:
+            return head
+
+        n = 0
+        cur = head
+        while cur is not None:
+            cur = cur.next
+            n += 1
+
+        edge = math.ceil(a/b*n)
+
+        if edge == 1:
+            return head.next
+
+        pre = None
+        cur = head
+        while edge > 1:
+            pre = cur
+            cur = cur.next
+            edge -= 1
+
+        pre.next = cur.next
+
+        return head
+
 if __name__ == '__main__':
     node = Node(1)
     node.next = Node(2)
@@ -59,5 +85,6 @@ if __name__ == '__main__':
     node.next.next.next.next = Node(5)
     node.next.next.next.next.next = Node(6)
 
-    node = RemoveNode.remove_mid_node(node)
-    RemoveNode.print_linkedlist(node)
+    RemoveNode.remove_mid_node(node)
+    RemoveNode.remove_k_node(node, 2, 5)
+    RemoveNode.print_list(node)
