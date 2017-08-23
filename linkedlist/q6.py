@@ -8,6 +8,8 @@
 点，该节点自己组成一个单向环形链表，其他节点都删掉
 进阶：
 如果链表头结点数为N,想在时间复杂度为O(N)时完成原问题的要求，如何实现
+
+思路：参见https://blog.oldj.net/2010/05/27/joseph-ring/
 """
 
 
@@ -20,10 +22,10 @@ class JosephusCircle(PrintMixin):
         if head is None or head.next == head or m < 1:
             return head
 
-        count = 0
-        node = head
-        pre = None
-        while node != node.next:
+        count = 1
+        node = head.next
+        pre = head
+        while node != head:
             count += 1
             if count < m:
                 pre = node
@@ -34,6 +36,33 @@ class JosephusCircle(PrintMixin):
 
         return node
 
+    @classmethod
+    def kill_2(cls, head, m):
+
+        if head is None or head.next == head or m < 1:
+            return head
+
+        length = 1
+        node = head.next
+        while node != head:
+            length += 1
+            node = node.next
+        alive_num = cls.get_alive(length, m)
+        count = 1
+        node = head
+        while count < alive_num:
+            count += 1
+            node = node.next
+
+        return node
+
+    @staticmethod
+    def get_alive(n, m):
+        if n == 1:
+            return 1
+        return (JosephusCircle.get_alive(n-1, m) + m) % n
+
+
 if __name__ == '__main__':
     cur_node = Node(1)
     cur_node.next = Node(2)
@@ -43,4 +72,14 @@ if __name__ == '__main__':
     cur_node.next.next.next.next.next = cur_node
 
     cur_node = JosephusCircle.kill_1(cur_node, 3)
+    print(cur_node.value)
+
+    cur_node = Node(1)
+    cur_node.next = Node(2)
+    cur_node.next.next = Node(3)
+    cur_node.next.next.next = Node(4)
+    cur_node.next.next.next.next = Node(5)
+    cur_node.next.next.next.next.next = cur_node
+
+    cur_node = JosephusCircle.kill_2(cur_node, 3)
     print(cur_node.value)
