@@ -18,3 +18,13 @@ class PrintMixin:
             print(head.value, end=' ')
             head = head.next
         print()
+
+    @staticmethod
+    def print_list_rand(head):
+        while head is not None:
+            if head.rand is None:
+                print('-', end=' ')
+            else:
+                print(head.rand.value, end=' ')
+            head = head.next
+        print()
