@@ -80,13 +80,19 @@ class CopyList(PrintMixin):
             if node is not None:
                 new_node = node.next
 
-        new_head = head.next
-        new_node = head.next
-        while new_node.next is not None:
-            new_node.next = new_node.next.next
-            new_node = new_node.next
+        origin = head
+        res = head.next
+        while origin is not None:
+            next = origin.next.next
+            new_node = origin.next
+            if next is not None:
+                new_node.next = new_node.next.next
+            else:
+                new_node.next = None
+            origin.next = next
+            origin = next
 
-        return new_head
+        return res
 
 
 if __name__ == '__main__':
