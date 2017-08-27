@@ -15,6 +15,11 @@ Node类中的value是节点值，next指针和正常单链表中next指针的意
 rand指针指向3',2'的rand指针指向null，3'的rand指针指向1',最后返回1'
 
 进阶：不使用额外的数据结构，只用有限几个变量，且在时间复杂度为O(N)内完成原问题要实现的函数。
+
+思路：
+1）如果不考虑空间复杂度，可使用hashmap求解
+2）由于复制的链表和原链表具有操作一致性，所以可以直接在原链表中每个元素后插入一个和前一个一样的
+元素，两两元素的取node.rand操作必定是一致的
 """
 
 
@@ -51,6 +56,38 @@ class CopyList(PrintMixin):
 
         return temp_map.get(head)
 
+    @classmethod
+    def copy_list(cls, head):
+        if head is None:
+            return head
+        node = head
+        while node is not None:
+            next_node = node.next
+            new_next = Node(node.value)
+            node.next = new_next
+            new_next.next = next_node
+            node = next_node
+
+        node = head
+        new_node = head.next
+        while node is not None:
+            if node.rand is not None:
+                new_node.rand = node.rand.next
+            else:
+                new_node.rand = None
+
+            node = node.next.next
+            if node is not None:
+                new_node = node.next
+
+        new_head = head.next
+        new_node = head.next
+        while new_node.next is not None:
+            new_node.next = new_node.next.next
+            new_node = new_node.next
+
+        return new_head
+
 
 if __name__ == '__main__':
     head = Node(1)
@@ -69,3 +106,6 @@ if __name__ == '__main__':
 
     res1 = CopyList.copy_list_use_map(head)
     CopyList.print_list_rand(res1)
+
+    res2 = CopyList.copy_list(head)
+    CopyList.print_list_rand(res2)
