@@ -4,6 +4,12 @@
 例如：k = 3时
 链表：1->2->3->4->5->6->7->8->null
 调整后:3->2->1->6->5->4->7->8->null,7、8不调整，因为不够一组
+
+思路：
+1）使用辅助栈或者队列来做n*k个节点的倒置
+2）直接使用有限（四个）变量来解决该问题，left表示每k个节点的前一个，start表示每k个节点
+的第一个，end表示每k个节点的最后一个，right表示每k个节点的最后一个的下一个。在翻转之前，
+有关系：left.next = start  end.next = right。可利用该关系解决。注意边界条件
 """
 
 
@@ -18,6 +24,7 @@ class ReversePartList(PrintMixin):
 
         cur = head
         count = 0
+        # 辅助队列
         temp_stack = list()
 
         length = 0
@@ -25,9 +32,11 @@ class ReversePartList(PrintMixin):
             length += 1
             cur = cur.next
         cur = head
-
+        # 倒置后的头结点
         new_head = None
+        # 当前出现了几个 "k节点" 了
         circle_count = 0
+        # 每k个节点的尾节点倒置后的前一个节点
         new_pre_node = None
         while cur is not None:
             count += 1
