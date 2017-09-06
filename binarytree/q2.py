@@ -21,12 +21,14 @@ from binarytree.toolcls import Node
 
 
 class PrintEdgeNode:
+    # 求高度的方法
     @classmethod
     def get_height(cls, head, start):
         if head is None:
             return start
         return max(cls.get_height(head.left, start + 1), cls.get_height(head.right, start + 1))
 
+    # 层序遍历，需要求每一层对应的元素，可以使用这种方法
     @classmethod
     def get_each_level(cls, head, level, all_levels):
         if head is None:
@@ -69,6 +71,48 @@ class PrintEdgeNode:
         cls.print_leaf_not_in_map(head.left, l + 1, all_levels)
         cls.print_leaf_not_in_map(head.right, l + 1, all_levels)
 
+    @classmethod
+    def print_left_edge(cls, head, is_print):
+        if head is None:
+            return
+        if is_print or (head.left is None and head.right is None):
+            print(head.value, end=' ')
+        cls.print_left_edge(head.left, is_print)
+        if head.left is None and is_print:
+            sec_print = True
+        else:
+            sec_print = False
+        cls.print_left_edge(head.right, sec_print)
+
+    @classmethod
+    def print_right_edge(cls, head, is_print):
+        if head is None:
+            return
+        if head.left is None and is_print:
+            sec_print = True
+        else:
+            sec_print = False
+        cls.print_right_edge(head.left, sec_print)
+
+        cls.print_right_edge(head.right, is_print)
+        if is_print or (head.left is None and head.right is None):
+            print(head.value, end=' ')
+
+    @classmethod
+    def print_way2(cls, head):
+        if head is None:
+            return
+        print(head.value, end=' ')
+
+        if head.left is not None and head.right is not None:
+            cls.print_left_edge(head.left, True)
+            cls.print_right_edge(head.right, True)
+        else:
+            if head.left is not None:
+                cls.print_way2(head.left)
+            else:
+                cls.print_way2(head.right)
+
 
 if __name__ == '__main__':
     head = Node(1)
@@ -88,3 +132,5 @@ if __name__ == '__main__':
     head.right.left.left.left.left = Node(15)
     head.right.left.left.left.right = Node(16)
     PrintEdgeNode.print_way1(head)
+    print()
+    PrintEdgeNode.print_way2(head)
