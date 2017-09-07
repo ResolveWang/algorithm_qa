@@ -39,6 +39,59 @@ class SerializedTree:
         cur_node.right = cls.unserialized_tree(nodes_info)
         return cur_node
 
+    @classmethod
+    def serialized_tree_by_level(cls, head, res):
+        if head is None:
+            return res + '#!'
+        queue = list()
+        queue.append(head)
+
+        while len(queue) > 0:
+            cur_node = queue.pop(0)
+            if cur_node is not None:
+                res = res + str(cur_node.value) + '!'
+                queue.append(cur_node.left)
+                queue.append(cur_node.right)
+            else:
+                res = res + '#!'
+        return res
+
+    @classmethod
+    def unserialized_tree2(cls, serialized_str):
+        if serialized_str.strip() == '' or serialized_str.startswith('#'):
+            return None
+        res = serialized_str.split('!')
+        return cls.unserialized_tree_by_level(res)
+
+    @classmethod
+    def unserialized_tree_by_level(cls, res):
+        index = 0
+        node = cls.generate_node(res[index])
+        index += 1
+        queue = list()
+        if node is not None:
+            queue.append(node)
+        head = node
+        while len(queue) > 0:
+            node = queue.pop(0)
+            node_left = cls.generate_node(res[index])
+            index += 1
+            node_right = cls.generate_node(res[index])
+            index += 1
+            if node_left is not None:
+                node.left = node_left
+                queue.append(node_left)
+            if node_right is not None:
+                node.right = node_right
+                queue.append(node_right)
+        return head
+
+    @classmethod
+    def generate_node(cls, value):
+        if value == '#':
+            return None
+        return Node(value)
+
 
 if __name__ == '__main__':
     head = Node(1)
@@ -52,3 +105,9 @@ if __name__ == '__main__':
     print('serialized tree str is ', pre)
     head = SerializedTree.unserialized(pre)
     PrintTree.print_tree(head)
+
+    level = SerializedTree.serialized_tree_by_level(head, '')
+    print('serialized2 tree str is ', level)
+    head = SerializedTree.unserialized_tree2(level)
+    PrintTree.print_tree(head)
+
