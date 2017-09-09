@@ -50,6 +50,47 @@ class TreeVisit:
                 print(node1.value, end=' ')
             node1 = node1.right
 
+    @classmethod
+    def visit_in_last_order(cls, head):
+        if head is None:
+            return
+        node1 = head
+        while node1 is not None:
+            node2 = node1.left
+            if node2 is not None:
+                while node2.right is not None and node2.right != node1:
+                    node2 = node2.right
+                if node2.right is None:
+                    node2.right = node1
+                    node1 = node1.left
+                    continue
+                else:
+                    node2.right = None
+                    cls.print_edge(node1.left)
+            node1 = node1.right
+        cls.print_edge(head)
+
+    @classmethod
+    def print_edge(cls, head):
+        tail = cls.reverse_right_tree(head)
+        cur = tail
+        while cur is not None:
+            print(cur.value, end=' ')
+            cur = cur.right
+        cls.reverse_right_tree(tail)
+
+    @classmethod
+    def reverse_right_tree(cls, head):
+        pre = None
+        cur = head
+
+        while cur is not None:
+            right = cur.right
+            cur.right = pre
+            pre = cur
+            cur = right
+        return pre
+
 
 if __name__ == '__main__':
     head = Node(4)
@@ -63,3 +104,5 @@ if __name__ == '__main__':
     TreeVisit.visit_in_mid_order(head)
     print()
     TreeVisit.visit_in_pre_order(head)
+    print()
+    TreeVisit.visit_in_last_order(head)
