@@ -40,7 +40,7 @@ class BiggestSubBstTree:
         right_size = record[0]
         right_min = record[1]
         right_max = record[2]
-
+        # 这里找左子树最小的点，是为了right_bst的right_min，同理，右子树最大的点也是为了left_bst的left_max
         record[1] = min(left_min, value)
         record[2] = max(right_max, value)
 
