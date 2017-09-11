@@ -6,7 +6,6 @@
 """
 
 
-# todo 查找该解法的错误
 import sys
 
 from binarytree.toolcls import Node
@@ -16,20 +15,17 @@ from binarytree.q3 import PrintTree
 class BiggestSubBstTree:
     @classmethod
     def get_biggest_sub_bst_tree(cls, head):
-        record = list()
+        if head is None:
+            return
+        record = [0 for _ in range(3)]
         return cls.visit_in_last_order(head, record)
 
     @classmethod
     def visit_in_last_order(cls, head, record):
         if head is None:
-            if len(record) == 0:
-                record.append(0)
-                record.append(sys.maxsize)
-                record.append(-sys.maxsize)
-            else:
-                record[0] = 0
-                record[1] = sys.maxsize
-                record[2] = -sys.maxsize
+            record[0] = 0
+            record[1] = sys.maxsize
+            record[2] = -sys.maxsize
             return None
         value = head.value
         left = head.left
@@ -48,18 +44,15 @@ class BiggestSubBstTree:
         record[1] = min(left_min, value)
         record[2] = max(right_max, value)
 
-        print(record[0], record[1], record[2])
-        print()
-
         if left == left_bst and right == right_bst and left_max < value < right_min:
             record[0] = left_size + right_size + 1
             return head
 
         record[0] = max(left_size, right_size)
         if left_size > right_size:
-            return left
+            return left_bst
         else:
-            return right
+            return right_bst
 
 
 if __name__ == '__main__':
