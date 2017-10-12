@@ -36,14 +36,12 @@ class PrintZigzag:
 
         queue = [root]
         level = 1
-        while True:
-            if len(queue) > 0:
-                cur_node = queue.pop(0)
-                if cur_node == root:
-                    print('Level {}'.format(level), end=':')
-                print(cur_node.value, end=' ')
-            else:
-                break
+        while len(queue) > 0:
+            cur_node = queue.pop(0)
+            if cur_node == root:
+                print('Level {}'.format(level), end=':')
+            print(cur_node.value, end=' ')
+
             if cur_node.left is not None:
                 queue.append(cur_node.left)
                 nlast = cur_node.left.value
@@ -55,6 +53,49 @@ class PrintZigzag:
                 level += 1
                 print('Level {}'.format(level), end=':')
                 last = nlast
+
+    @classmethod
+    def print_by_zigzag(cls, root):
+        if root is None:
+            return
+
+        flag = True
+        queue = [root]
+        last = root.value
+        nlast = None
+        level = 1
+        print('Level {}'.format(level), end=':')
+        while len(queue) > 0:
+            if flag is True:
+                cur_node = queue.pop(0)
+                if cur_node.left is not None:
+                    queue.append(cur_node.left)
+                    if nlast is None:
+                        nlast = cur_node.left.value
+                if cur_node.right is not None:
+                    queue.append(cur_node.right)
+                    if nlast is None:
+                        nlast = cur_node.right.value
+
+            else:
+                cur_node = queue.pop()
+                if cur_node.right is not None:
+                    queue.insert(0, cur_node.right)
+                    if nlast is None:
+                        nlast = cur_node.right.value
+                if cur_node.left is not None:
+                    queue.insert(0, cur_node.left)
+                    if nlast is None:
+                        nlast = cur_node.left.value
+            print(cur_node.value, end=' ')
+
+            if last == cur_node.value and len(queue) > 0:
+                last = nlast
+                nlast = None
+                flag = not flag
+                level += 1
+                print()
+                print('Level {}'.format(level), end=':')
 
 
 if __name__ == '__main__':
@@ -68,3 +109,6 @@ if __name__ == '__main__':
     head.right.left.right = Node(8)
 
     PrintZigzag.print_by_level(head)
+    print()
+    print()
+    PrintZigzag.print_by_zigzag(head)
