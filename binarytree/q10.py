@@ -9,6 +9,7 @@
 from binarytree.toolcls import Node
 
 
+# todo 完成进阶题目
 class BSTChecker:
     def __init__(self):
         self.nodes = list()
