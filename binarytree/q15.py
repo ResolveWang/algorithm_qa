@@ -31,8 +31,30 @@ class JudgeTool:
             cls.is_bst_tree_detail(head.right, head, 'right', res)
 
     @classmethod
-    def is_full_tree(cls, head):
-        pass
+    def is_complete_tree(cls, head):
+        if head is None:
+            return True
+        my_queue = list()
+        my_queue.append(head)
+        to_leaf = 0
+        while len(my_queue) > 0:
+            node = my_queue.pop(0)
+            if node.left is not None and node.right is not None:
+                if to_leaf == 1:
+                    return False
+                my_queue.append(node.left)
+                my_queue.append(node.right)
+            if node.left is None and node.right is not None:
+                return False
+            if node.left is not None and node.right is None:
+                if to_leaf == 1:
+                    return False
+                to_leaf = 1
+                my_queue.append(node.left)
+            if not node.left and not node.right:
+                if not to_leaf:
+                    to_leaf = 1
+        return True
 
 
 if __name__ == '__main__':
@@ -44,3 +66,4 @@ if __name__ == '__main__':
     head.right.left = Node(5)
 
     print(JudgeTool.is_bst_tree(head))
+    print(JudgeTool.is_complete_tree(head))
