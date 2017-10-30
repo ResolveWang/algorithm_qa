@@ -56,13 +56,42 @@ class ReconstructTree:
 
         return root
 
+    @classmethod
+    def reconstruct_in_pre_pos_order(cls, pre, pos):
+        if not pre or not pos:
+            return
+
+        d = dict()
+        for index, value in enumerate(pos):
+            d[value] = index
+        return cls.reconstruct_in_pre_pos_order_detail(pre, 0, len(pre)-1, pos, 0, len(pos)-1, d)
+
+    @classmethod
+    def reconstruct_in_pre_pos_order_detail(cls, p, pi, pj, s, si, sj, d):
+        head = Node(s[sj])
+        sj -= 1
+
+        if pi == pj:
+            return head
+
+        pi += 1
+        index = d.get(p[pi])
+
+        head.left = cls.reconstruct_in_pre_pos_order_detail(p, pi, pi+index-si, s, si, index, d)
+
+        head.right = cls.reconstruct_in_pre_pos_order_detail(p, pi+index-si+1, pj, s, index+1, sj, d)
+        return head
+
 
 if __name__ == '__main__':
-    cur_pre = [1, 2, 4, 8, 5, 3, 6, 7]
-    cur_in = [8, 4, 2, 5, 1, 6, 3, 7]
-    cur_pos = [8, 4, 5, 2, 6, 7, 3, 1]
+    cur_pre = [1, 2, 4, 5, 8, 9, 3, 6, 7]
+    cur_in = [4, 2, 8, 5, 9, 1, 6, 3, 7]
+    cur_pos = [4, 8, 9, 5, 2, 6, 7, 3, 1]
     head = ReconstructTree.reconstruct_in_pre_order(cur_pre, cur_in)
     PrintTree.print_tree(head)
 
     head = ReconstructTree.reconstruct_in_mid_order(cur_in, cur_pos)
+    PrintTree.print_tree(head)
+
+    head = ReconstructTree.reconstruct_in_pre_pos_order(cur_pre, cur_pos)
     PrintTree.print_tree(head)
