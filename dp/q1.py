@@ -9,6 +9,7 @@
 要求：对以上所有问题，实现时间复杂度为O(logN)的解法
 """
 
+# 由于数学能力和理解能力有限，这里给出O(N)的解法
 
 class FBNZ:
     @classmethod
@@ -49,6 +50,30 @@ class FBNZ:
 
         return cur
 
+    @classmethod
+    def cow_count(cls, n):
+        if n < 1:
+            return 0
+
+        if n == 1 or n == 2 or n == 3:
+            return n
+
+        cur = 3
+        pre = 2
+        prepare = 1
+        pos = 4
+
+        while pos <= n:
+            temp1 = cur
+            temp2 = pre
+            cur = prepare + cur
+            pre = temp1
+            prepare = temp2
+            pos += 1
+        return cur
+
 
 if __name__ == '__main__':
-    assert FBNZ.classic_question(7) == 13
+    assert FBNZ.classic_question(20) == 6765
+    assert FBNZ.jump_tj(20) == 10946
+    assert FBNZ.cow_count(20) == 1873
