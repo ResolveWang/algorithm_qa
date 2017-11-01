@@ -31,6 +31,24 @@ class FBNZ:
 
         return cur
 
+    @classmethod
+    def jump_tj(cls, n):
+        if n < 1:
+            return 0
+        if n == 1 or n == 2:
+            return n
+        cur = 2
+        pre = 1
+        pos = 3
+
+        while pos <= n:
+            temp = cur
+            cur = pre + cur
+            pre = temp
+            pos += 1
+
+        return cur
+
 
 if __name__ == '__main__':
     assert FBNZ.classic_question(7) == 13
