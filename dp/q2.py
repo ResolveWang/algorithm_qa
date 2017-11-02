@@ -21,13 +21,13 @@ class ShortestWay:
         for row in arr:
             my_arr.append([0 for _ in row])
 
-        for i in range(row_count):
+        for i in range(col_count):
             if i == 0:
                 my_arr[0][i] = arr[0][i]
             else:
                 my_arr[0][i] = arr[0][i] + my_arr[0][i-1]
 
-        for i in range(col_count):
+        for i in range(row_count):
             if i == 0:
                 continue
             else:
@@ -39,6 +39,47 @@ class ShortestWay:
 
         return my_arr[row_count-1][col_count-1]
 
+    @classmethod
+    def find_shortest_way_2(cls, arr):
+        if arr is None or len(arr) == 0:
+            return 0
+        my_arr = list()
+        row_count = len(arr)
+        col_count = len(arr[0])
+        length = min([row_count, col_count])
+        for _ in range(length):
+            my_arr.append(0)
+
+        if row_count > col_count:
+            for i in range(row_count):
+                for j in range(col_count):
+                    if i == 0 and j == 0:
+                        my_arr[j] = arr[0][0]
+                    else:
+                        if i == 0:
+                            my_arr[j] = my_arr[j-1] + arr[0][j]
+                        else:
+                            if j != 0:
+                                my_arr[j] = min([my_arr[j-1], my_arr[j]]) + arr[i][j]
+                            else:
+                                my_arr[j] = arr[i][j] + my_arr[j]
+
+        if row_count <= col_count:
+            for i in range(col_count):
+                for j in range(row_count):
+                    if i == 0 and j == 0:
+                        my_arr[j] = arr[0][0]
+                    else:
+                        if i == 0:
+                            my_arr[j] = my_arr[j-1] + arr[j][0]
+                        else:
+                            if j != 0:
+                                my_arr[j] = min([my_arr[j-1], my_arr[j]]) + arr[j][i]
+                            else:
+                                my_arr[j] = arr[j][i] + my_arr[j]
+
+        return my_arr[-1]
+
 
 if __name__ == '__main__':
     m = [
@@ -49,3 +90,4 @@ if __name__ == '__main__':
     ]
 
     print(ShortestWay.find_shortest_way_1(m))
+    print(ShortestWay.find_shortest_way_2(m))
