@@ -12,6 +12,9 @@
 class ShortestWay:
     @classmethod
     def find_shortest_way_1(cls, arr):
+        if arr is None or len(arr) == 0:
+            return 0
+
         my_arr = list()
         row_count = len(arr)
         col_count = len(arr[0])
