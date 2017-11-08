@@ -20,11 +20,15 @@ class MaxSubSeq:
         return dp
 
     @classmethod
-    def get_res_list(cls, arr):
+    def get_res_list_1(cls, arr):
         if not arr:
             return
 
         dp = cls.find_dp_way_1(arr)
+        return cls.common_compute(arr, dp)
+
+    @classmethod
+    def common_compute(cls, arr, dp):
         max_len = max(dp)
         index = 0
         for ind, value in enumerate(dp):
@@ -43,6 +47,39 @@ class MaxSubSeq:
 
         return res
 
+    @classmethod
+    def get_res_list_2(cls, arr):
+        if not arr:
+            return
+
+        dp = cls.find_dp_way_2(arr)
+        return cls.common_compute(arr, dp)
+
+    @classmethod
+    def find_dp_way_2(cls, arr):
+        dp = [0 for _ in range(len(arr))]
+        ends = [0 for _ in range(len(arr))]
+        ends[0] = arr[0]
+        dp[0] = 1
+
+        right = 0
+
+        for i in range(1, len(arr)):
+            l = 0
+            r = right
+            while l <= r:
+                m = int((l + r)/2)
+                if arr[i] > ends[m]:
+                    l = m + 1
+                else:
+                    r = m - 1
+            right = max([l, right])
+            ends[l] = arr[i]
+            dp[i] = l + 1
+
+        return dp
+
 
 if __name__ == '__main__':
-    print(MaxSubSeq.get_res_list([2, 1, 5, 3, 6, 4, 8, 9, 7]))
+    print(MaxSubSeq.get_res_list_1([2, 1, 5, 3, 6, 4, 8, 9, 7]))
+    print(MaxSubSeq.get_res_list_2([2, 1, 5, 3, 6, 4, 8, 9, 7]))
