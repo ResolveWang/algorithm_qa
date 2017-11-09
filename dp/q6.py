@@ -46,7 +46,7 @@ class Hanoi:
             cls.move(n-1, move_mid, move_from, move_to)
 
     @classmethod
-    def setp_1(cls, arr):
+    def step_1(cls, arr):
         if not arr:
             return -1
 
@@ -70,8 +70,38 @@ class Hanoi:
 
             return (1 << index) + res
 
+    @classmethod
+    def step_2(cls, arr):
+        if not arr:
+            return -1
+
+        move_from = 1
+        move_mid = 2
+        move_to = 3
+        res = 0
+
+        index = len(arr) - 1
+        while index >= 0:
+            if arr[index] == move_mid:
+                return -1
+
+            if arr[index] == move_from:
+                temp = move_mid
+                move_mid = move_to
+                move_to = temp
+            else:
+                temp = move_from
+                move_from = move_mid
+                move_mid = temp
+
+                res += (1 << index)
+
+            index -= 1
+        return res
+
 
 if __name__ == '__main__':
     Hanoi.main(2)
     my_arr = [3, 3, 2, 1]
-    print(Hanoi.setp_1(my_arr))
+    print(Hanoi.step_2(my_arr))
+    print(Hanoi.step_1(my_arr))
