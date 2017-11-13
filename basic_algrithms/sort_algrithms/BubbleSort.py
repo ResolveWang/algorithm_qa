@@ -34,7 +34,7 @@ if __name__ == '__main__':
         arr2 = Comparator.copy_arr(arr1)
 
         sorted_arr1 = bubble_sort(arr1)
-        sorted_arr2 = bubble_sort(arr2)
+        sorted_arr2 = sorted(arr2)
 
         if not Comparator.is_equal(sorted_arr1, sorted_arr2):
             res = False
