@@ -49,8 +49,44 @@ class MaxSubPubstrFinder:
 
         return str1[row-max_length+1:row+1]
 
+    @classmethod
+    def get_max_common_str2(cls, str1, str2):
+        if not str1 or not str2:
+            return ''
+
+        str_len1 = len(str1)
+        str_len2 = len(str2)
+        col = str_len2 - 1
+        max_length = 0
+        max_end = 0
+        row = 0
+
+        while row < str_len1:
+            i = row
+            cur_len = 0
+            j = col
+            while i < str_len1 and j < str_len2:
+                if str1[i] != str2[j]:
+                    cur_len = 0
+                else:
+                    cur_len += 1
+
+                if cur_len > max_length:
+                    max_length = cur_len
+                    max_end = i
+                i += 1
+                j += 1
+
+            if col > 0:
+                col -= 1
+            else:
+                row += 1
+
+        return str1[max_end-max_length+1:max_end+1]
+
 
 if __name__ == '__main__':
     str1 = "1AB2345CD"
     str2 = "12345EF"
     print(MaxSubPubstrFinder.get_max_common_str(str1, str2))
+    print(MaxSubPubstrFinder.get_max_common_str2(str1, str2))
