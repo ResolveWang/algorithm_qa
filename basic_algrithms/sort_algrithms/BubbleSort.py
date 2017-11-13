@@ -3,7 +3,7 @@
 """
 
 
-from basic_class.sort_algrithms.benchmark import Comparator
+from basic_algrithms.sort_algrithms.benchmark import Comparator
 
 
 def bubble_sort(arr):
