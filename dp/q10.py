@@ -27,18 +27,18 @@ class CrossStr:
         dp[0][0] = True
 
         for i in range(1, str_len1+1):
-            if aim[:i+1] == str1[:i+1]:
+            if aim[i-1] == str1[i-1]:
                 dp[i][0] = True
 
         for j in range(1, str_len2+1):
-            if aim[:j+1] == str2[:j+1]:
+            if aim[j-1] == str2[j-1]:
                 dp[0][j] = True
 
         for i in range(1, str_len1+1):
             for j in range(1, str_len2+1):
-                if dp[i-1][j] and aim[i+j-1] == str1[:i+1][:-1]:
+                if dp[i-1][j] and aim[i+j-1] == str1[i-1]:
                     dp[i][j] = True
-                elif dp[i][j-1] and aim[i+j-1] == str2[:j+1][:-1]:
+                elif dp[i][j-1] and aim[i+j-1] == str2[j-1]:
                     dp[i][j] = True
                 else:
                     dp[i][j] = False
