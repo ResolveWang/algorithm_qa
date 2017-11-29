@@ -36,9 +36,9 @@ class ShortestEnd:
                 center = i
 
             if right == len(my_str):
-                max_value = max([max_value, parr[i]])
-
-        return str1 + str1[:max_value-1][::-1]
+                max_value = parr[i]
+                break
+        return str1 + str1[:len(str1)+1-max_value][::-1]
 
     @classmethod
     def get_manacher_str(cls, str1):
@@ -50,5 +50,5 @@ class ShortestEnd:
 
 
 if __name__ == '__main__':
-    my_str = 'abcd123321'
+    my_str = 'abcd12321'
     print(ShortestEnd.get_shortest_end_by_manacher(my_str))
