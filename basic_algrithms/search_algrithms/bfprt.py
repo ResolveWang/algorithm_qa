@@ -4,15 +4,13 @@ BFPRT算法
 时间复杂度：O(N)
 """
 
-from basic_algrithms.sort_algrithms import insert_sort
-
 
 class BFPRT:
     @classmethod
     def get_the_k_number(cls, arr, k):
         if not arr or len(arr) < k:
             return
-        cls.select(arr, 0, len(arr)-1, k)
+        return cls.select(arr, 0, len(arr)-1, k)
 
     @classmethod
     def select(cls, arr, begin, end, k):
@@ -44,9 +42,9 @@ class BFPRT:
 
     @classmethod
     def get_median_value(cls, arr, begin, end):
-        sorted_arr = cls.insert_sort(arr, begin, end)
-        index = int((end - begin) / 2)
-        return sorted_arr[index]
+        cls.insert_sort(arr, begin, end)
+        index = int((end+begin) / 2)
+        return arr[index]
 
     @classmethod
     def patition(cls, arr, begin, end, privot):
@@ -54,15 +52,15 @@ class BFPRT:
         cur = begin
         big = end + 1
         while cur != big:
-            if cur < privot:
+            if arr[cur] < privot:
                 small += 1
                 arr[small], arr[cur] = arr[cur], arr[small]
                 cur += 1
-            elif cur == privot:
-                cur += 1
-            else:
+            elif arr[cur] > privot:
                 big -= 1
                 arr[big], arr[cur] = arr[cur], arr[big]
+            else:
+                cur += 1
         return small+1, big-1
 
     @classmethod
@@ -77,4 +75,5 @@ class BFPRT:
 
 
 if __name__ == '__main__':
-    BFPRT.get_the_k_number([6, 9, 1, 3, 1, 2, 2, 5, 6, 1, 3, 5, 9, 7, 2, 5, 6, 1, 9], 10)
+    print(BFPRT.get_the_k_number([6, 9, 1, 3, 1, 2, 2, 5, 6, 1, 3, 5, 9, 7, 2, 5, 6, 1, 9], 10))
+
