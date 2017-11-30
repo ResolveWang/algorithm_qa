@@ -10,14 +10,13 @@ def insert_sort(arr):
     if not arr or len(arr) < 2:
         return arr
 
-    for index in range(1, len(arr)):
-        cur = index - 1
-        while cur >= 0:
-            if arr[cur] <= arr[index]:
-                break
-            arr[cur], arr[index] = arr[index], arr[cur]
+    for i in range(1, len(arr)):
+        j = i - 1
+        while j >= 0 and arr[j] > arr[j+1]:
+            arr[j], arr[j+1] = arr[j+1], arr[j]
+            j -= 1
 
-            cur -= 1
+    return arr
 
 
 if __name__ == '__main__':
@@ -37,7 +36,6 @@ if __name__ == '__main__':
         if not Comparator.is_equal(sorted_arr1, sorted_arr2):
             res = False
             break
-
     if not res:
         print('Failed ')
     else:
