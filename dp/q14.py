@@ -37,7 +37,26 @@ class MaxCardNum:
 
         return min([cls.first_fetch(arr, i+1, j), cls.first_fetch(arr, i, j-1)])
 
+    @classmethod
+    def get_max_num_way_2(cls, arr):
+        if not arr:
+            return 0
+
+        first_fetch = [[0 for _ in arr] for _ in arr]
+        last_fetch = [[0 for _ in arr] for _ in arr]
+
+        for j in range(len(arr)):
+            first_fetch[j][j] = arr[j]
+            i = j - 1
+            while i >= 0:
+                first_fetch[i][j] = max([arr[i]+last_fetch[i+1][j], arr[j]+last_fetch[i][j-1]])
+                last_fetch[i][j] = min([first_fetch[i+1][j], first_fetch[i][j-1]])
+                i -= 1
+
+        return max([first_fetch[0][len(arr)-1], last_fetch[0][len(arr)-1]])
+
 
 if __name__ == '__main__':
     my_arr = [1, 9, 1]
     print(MaxCardNum.get_max_num_way_1(my_arr))
+    print(MaxCardNum.get_max_num_way_2(my_arr))
