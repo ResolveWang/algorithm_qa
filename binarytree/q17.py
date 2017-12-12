@@ -12,7 +12,7 @@ public class Node{
 }
 
 该结构比普通二叉树节点结构多了一个指向父节点的parent指针。假设有一棵Node类型的节点组成的二叉树，树中每个节点的
-parent指针都正确指向自己的父节点，头结点的parent指向null。只给一个在二叉树中的某个节点node，请实现返回node
+parent指针都正确指向自己的父节点，头结点的parent指向None。只给一个在二叉树中的某个节点node，请实现返回node
 的后继节点的函数。
 
 在二叉树的中序遍历的序列中，node的下一个节点叫做node的后继节点。
@@ -45,6 +45,7 @@ class NextNode:
         while node.left is not None:
             node = node.left
         return node
+
 
 if __name__ == '__main__':
     head = Node(6)
