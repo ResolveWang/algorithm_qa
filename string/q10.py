@@ -55,6 +55,23 @@ class ChasHandler:
 
         return chas
 
+    @classmethod
+    def solve_problem2(cls, chas):
+        if not chas:
+            return chas
+
+        cur_index = 0
+        latest_index = 0
+        length = len(chas)
+        while cur_index < length:
+            if chas[cur_index] == '*':
+                chas[cur_index], chas[latest_index] = chas[latest_index], chas[cur_index]
+                latest_index += 1
+            cur_index += 1
+
+        return chas
+
 
 if __name__ == '__main__':
     print(ChasHandler.solve_problem1(['a', ' ', 'b', ' ', ' ', 'c', '', '', '', '', '', '', '', '']))
+    print(ChasHandler.solve_problem2(['1', '2', '*', '*', '3', '4', '5']))
