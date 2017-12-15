@@ -33,7 +33,6 @@ class Palindrome:
                     dp[i][j] = min([dp[i][j-1], dp[i+1][j]]) + 1
                 i -= 1
             j += 1
-        print(dp[0][length-1])
         return dp
 
     @classmethod
@@ -70,7 +69,51 @@ class Palindrome:
 
         return ''.join(new_chars)
 
+    @classmethod
+    def get_smallest_palindrome_by_lps(cls, strs, strlps):
+        if not strs or len(strs) == 1:
+            return strs
+
+        strsl = 0
+        strsr = len(strs) - 1
+        lpsl = 0
+        lpsr = len(strlps) - 1
+        new_chars = ['' for _ in range(2 * len(strs) - len(strlps))]
+        charsl = 0
+        charsr = len(new_chars) - 1
+        templ = 0
+        templr = len(strs)
+        while lpsl <= lpsr:
+            while strlps[lpsl] != strs[strsl]:
+                strsl += 1
+            left_part = strs[templ:strsl]
+
+            templ = strsl + 1
+
+            while strlps[lpsr] != strs[strsr]:
+                strsr -= 1
+
+            right_part = strs[strsr+1:templr]
+            templr = strsr
+            joined_part = left_part + right_part
+
+            for i in joined_part:
+                new_chars[charsl] = i
+                new_chars[charsr] = i
+                charsl += 1
+                charsr -= 1
+            new_chars[charsl] = strs[strsl]
+            new_chars[charsr] = strs[strsl]
+            charsl += 1
+            charsr -= 1
+
+            lpsl += 1
+            lpsr -= 1
+
+        return ''.join(new_chars)
+
 
 if __name__ == '__main__':
     my_str = "AB1CD2EFG3H43IJK2L1MN"
     print(Palindrome.get_smallest_palindrome(my_str))
+    print(Palindrome.get_smallest_palindrome_by_lps(my_str, '1234321'))
