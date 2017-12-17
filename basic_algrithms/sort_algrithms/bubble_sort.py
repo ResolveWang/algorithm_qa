@@ -16,8 +16,6 @@ def bubble_sort(arr):
             # 只大于不等于可以保证稳定性
             if arr[j] > arr[j+1]:
                 arr[j], arr[j+1] = arr[j+1], arr[j]
-            j += 1
-        i += 1
 
     return arr
 
@@ -33,10 +31,10 @@ if __name__ == '__main__':
         arr1 = Comparator.gen_random_array(max_size, max_value)
         arr2 = Comparator.copy_arr(arr1)
 
-        sorted_arr1 = bubble_sort(arr1)
+        bubble_sort(arr1)
         sorted_arr2 = sorted(arr2)
 
-        if not Comparator.is_equal(sorted_arr1, sorted_arr2):
+        if not Comparator.is_equal(arr1, sorted_arr2):
             res = False
             break
 
