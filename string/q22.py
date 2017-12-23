@@ -50,9 +50,58 @@ class RegularExpressionMath:
 
         return cls.process(s, e, si, ei+2)
 
+    @classmethod
+    def init_map(cls, s, e):
+        s_len = len(s)
+        e_len = len(e)
+        dp = [[False for _ in range(e_len+1)] for _ in range(s_len+1)]
+        dp[s_len][e_len] = True
+
+        j = e_len - 2
+        while j >= 0:
+            if e[j] != '*' and e[j+1] == '*':
+                dp[s_len][j] = True
+            else:
+                break
+            j -= 1
+
+        if e[e_len-1] == '.' or e[e_len-1] == s[s_len-1]:
+            dp[s_len-1][e_len-1] = True
+        return dp
+
+    @classmethod
+    def is_match_by_dp(cls, s, e):
+        if not s or not e:
+            return False
+
+        if not cls.is_valid(s, e):
+            return False
+
+        dp = cls.init_map(s, e)
+        i = len(s) - 1
+        while i >= 0:
+            j = len(e) - 2
+            while j >= 0:
+                if e[j+1] != '*':
+                    dp[i][j] = (s[i] == e[j] or e[j] == '.') and dp[i+1][j+1]
+                else:
+                    si = i
+                    while si != len(s) and (s[si] == e[j] or e[j] == '.'):
+                        if dp[si][j+2]:
+                            dp[i][j] = True
+                            break
+                        si += 1
+
+                    if not dp[i][j]:
+                        dp[i][j] = dp[si][j+2]
+                j -= 1
+            i -= 1
+        return dp[0][0]
+
 
 if __name__ == '__main__':
     strs = "abcccdefg"
     exp = "ab.*d.*e.*"
     print(RegularExpressionMath.is_match(strs, exp))
+    print(RegularExpressionMath.is_match_by_dp(strs, exp))
 
