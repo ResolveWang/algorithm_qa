@@ -4,6 +4,7 @@
 如果数组arr的长度为N,排序之后自然可以得到最小的k个数，此时时间复杂度与排序时间
 复杂度相同，为O(NlogN)，本地要求读者实现时间复杂度为O(NlogK)和O(logN)的解法。
 """
+from basic_algrithms.search_algrithms.bfprt import BFPRT
 
 
 class HeapSortSolver:
@@ -46,6 +47,25 @@ class HeapSortSolver:
             left = index * 2 + 1
 
 
+class BFPRTSolver(BFPRT):
+    @classmethod
+    def get_k_small_nums(cls, arr, k):
+        if not k or len(arr) <= k:
+            return arr
+
+        kth_num = cls.get_the_k_number(arr, k)
+        res = [kth_num]
+        for i in arr:
+            if i < kth_num:
+                res.append(i)
+        diff = k - len(res)
+        for _ in range(diff):
+            res.append(kth_num)
+
+        return res
+
+
 if __name__ == '__main__':
     my_arr = [6, 9, 1, 3, 1, 2, 2, 5, 6, 1, 3, 5, 9, 7, 2, 5, 6, 1, 9]
     print(HeapSortSolver.get_k_small_nums(my_arr, 10))
+    print(BFPRTSolver.get_k_small_nums(my_arr, 10))
