@@ -66,10 +66,9 @@ class BFPRT:
     @classmethod
     def insert_sort(cls, arr, begin, end):
         for i in range(begin+1, end+1):
-            j = i
-            while j > begin and arr[j-1] > arr[j]:
-                arr[j], arr[j-1] = arr[j-1], arr[j]
-                j -= 1
+            while i > begin and arr[i-1] > arr[i]:
+                arr[i], arr[i-1] = arr[i-1], arr[i]
+                i -= 1
 
         return arr
 
