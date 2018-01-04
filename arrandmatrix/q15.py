@@ -18,19 +18,19 @@ class EvenOddPlacer:
             else:
                 even_num += 1
 
-        # 数量小的必然有足够的位置放置
+        # 数量小的必然有足够的位置放置, j只进不退，则时间复杂度为O(N)
         if odd_num <= even_num:
             i = 0
+            j = 1
             while i < len(arr):
-                j = i + 1
                 while arr[i] % 2 != 0 and j < len(arr):
                     arr[i], arr[j] = arr[j], arr[i]
                     j += 2
                 i += 2
         else:
             i = 1
+            j = 0
             while i < len(arr):
-                j = i - 1
                 while arr[i] % 2 == 0 and j < len(arr):
                     arr[i], arr[j] = arr[j], arr[i]
                     j += 2
