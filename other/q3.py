@@ -49,6 +49,19 @@ class AssignedNumFinder:
 
         return res
 
+    @classmethod
+    def get_1_nums_best(cls, n):
+        biggest_num = 0
+        while pow(2, biggest_num) <= n:
+            biggest_num += 1
+
+        res = 0
+        for i in range(1, biggest_num + 1):
+            res += int(n / pow(2, i))
+
+        return res
+
 
 if __name__ == '__main__':
     print(AssignedNumFinder.get_0_nums_best(1000000000))
+    print(AssignedNumFinder.get_1_nums_best(1000000000))
