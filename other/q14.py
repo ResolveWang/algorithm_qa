@@ -47,7 +47,29 @@ class UnformedSum:
         cls.process(arr, index+1, cur_sum+arr[index], cur_set)
         cls.process(arr, index+1, cur_sum, cur_set)
 
+    @classmethod
+    def unformed_sum_dp(cls, arr):
+        if not arr:
+            return 1
+        max_sum = sum(arr)
+        min_value = min(arr)
+        dp = [False for _ in range(max_sum+1)]
+        dp[0] = True
+        for i in arr:
+            dp[i] = True
+
+        for i in range(len(arr)):
+            for j in range(arr[i]+1, max_sum-arr[i]+1):
+                if dp[j] is True:
+                    dp[j+arr[i]] = True
+
+        for i in range(min_value, len(dp)):
+            if not dp[i]:
+                return i
+
+        return max_sum+1
+
 
 if __name__ == '__main__':
-    print(UnformedSum.unformed_sum([3, 2, 5]))
-    print(UnformedSum.unformed_sum([1, 2, 4]))
+    print(UnformedSum.unformed_sum_dp([3, 2, 5]))
+    print(UnformedSum.unformed_sum_dp([1, 2, 4]))
