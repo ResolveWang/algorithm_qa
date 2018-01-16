@@ -69,7 +69,22 @@ class UnformedSum:
 
         return max_sum+1
 
+    @classmethod
+    def unformed_sum_contined_1(cls, arr):
+        if not arr:
+            return 1
+
+        sorted_arr = sorted(arr)
+        sum_val = 0
+        for i in range(len(sorted_arr)):
+            if sum_val + 1 < sorted_arr[i]:
+                return sum_val + 1
+            sum_val += arr[i]
+
+        return sum_val + 1
+
 
 if __name__ == '__main__':
     print(UnformedSum.unformed_sum_dp([3, 2, 5]))
     print(UnformedSum.unformed_sum_dp([1, 2, 4]))
+    print(UnformedSum.unformed_sum_contined_1([1, 2, 4]))
