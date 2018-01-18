@@ -40,32 +40,37 @@ class ChsIntegerSwitcher:
 
         # 最高次幂
         high_pos = 0
-        while pow(base_num, high_pos) < num:
+        cur_sum = 0
+        while cur_sum <= num:
+            cur_sum += pow(base_num, high_pos)
             high_pos += 1
 
+        high_pos -= 1
         chs = list()
-        cur_pos = 0
-        while cur_pos <= high_pos and num > 0:
-            tmp = pow(base_num, high_pos)
-            print(tmp)
-            if num % tmp == 0:
-                cur_value = value - 1
-            else:
-                cur_value = int(num/tmp)
-            chs.append(chs_dict.get(cur_value))
-            num -= tmp * cur_value
+        while high_pos >= 1 and num > 0:
+            tmp = pow(base_num, high_pos-1)
+            tmp_count = 0
+            left = num
+
+            while left >= 0 and tmp_count <= base_num:
+                left = left - tmp
+                tmp_count += 1
+
+            tmp_count -= 1
+            chs.append(chs_dict.get(tmp_count))
+            num -= tmp * tmp_count
             high_pos -= 1
         print(chs)
         return chs
 
 
 if __name__ == '__main__':
-    # ChsIntegerSwitcher.chs_to_int(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-    #                                'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-    #                                'X', 'Y', 'Z'], 'ZZZ')
-    #
-    # ChsIntegerSwitcher.chs_to_int(['A', 'B', 'C'], 'ABBA')
-    # ChsIntegerSwitcher.int_to_chs(['A', 'B', 'C'], 3)
-    ChsIntegerSwitcher.int_to_chs(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+    ChsIntegerSwitcher.chs_to_int(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
                                    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-                                   'X', 'Y', 'Z'], 18278)
+                                   'X', 'Y', 'Z'], 'ZZZ')
+
+    ChsIntegerSwitcher.chs_to_int(['A', 'B', 'C'], 'ABBA')
+    ChsIntegerSwitcher.int_to_chs(['A', 'B', 'C'], 4)
+    ChsIntegerSwitcher.int_to_chs(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+                                   'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+                                   'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'], 18277)
