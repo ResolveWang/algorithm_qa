@@ -63,7 +63,7 @@ class Number2StrEn:
             return 'Zero'
         elif num < 0:
             res = 'Negtive, '
-
+        num = abs(num)
         billion = 1000000000
         million = 1000000
         thousand = 1000
@@ -88,9 +88,104 @@ class Number2StrEn:
         return res
 
 
+class Number2StrZH:
+    mapper = ["零", "一", "二", "三", "四", "五", "六",
+              "七", "八", "九", "十"]
+
+    ten_mapper = ["十"]
+    hundred_mapper = ["百"]
+    thousand_mapper = ["千"]
+    ten_thousand_mapper = ["万"]
+    billion_mapper = ["亿"]
+
+    @classmethod
+    def num0to10(cls, num):
+        if num < 0 or num > 10:
+            return ''
+
+        return cls.mapper[num]
+
+    @classmethod
+    def num0to99(cls, num):
+        if num < 0 or num > 99:
+            return ''
+        if num <= 10:
+            return cls.mapper[num]
+        high_pos = int(num / 10)
+        return cls.mapper[high_pos] + '十' + cls.num0to10(num % 10)
+
+    @classmethod
+    def num0to999(cls, num):
+        if num < 1 or num > 999:
+            return ''
+        if num < 100:
+            return cls.num0to99(num)
+
+        high_pos = int(num / 100)
+        rest = num % 100
+        if rest == 0:
+            return cls.mapper[high_pos] + '百'
+        elif rest < 10:
+            return cls.mapper[high_pos] + '百零' + cls.num0to10(rest)
+        else:
+            return cls.mapper[high_pos] + '百' + cls.num0to99(rest)
+
+    @classmethod
+    def num0to9999(cls, num):
+        if num < 0 or num > 9999:
+            return ''
+        if num < 1000:
+            return cls.num0to999(num)
+
+        high_pos = int(num / 1000)
+        rest = num % 1000
+        if rest == 0:
+            return cls.mapper[high_pos] + '千'
+        elif rest < 100:
+            return cls.mapper[high_pos] + '千零' + cls.num0to99(rest)
+        else:
+            return cls.mapper[high_pos] + '千' + cls.num0to999(rest)
+
+    @classmethod
+    def num0to99999999(cls, num):
+        if num < 0 or num > 99999999:
+            return ''
+        if num < 10000:
+            return cls.num0to9999(num)
+        high_pos = int(num / 10000)
+        rest = num % 10000
+        if rest == 0:
+            return cls.num0to9999(high_pos) + '万'
+        elif rest < 1000:
+            return cls.num0to9999(high_pos) + '万零' + cls.num0to999(rest)
+        else:
+            return cls.num0to9999(high_pos) + '万' + cls.num0to9999(num)
+
+    @classmethod
+    def numtozh(cls, num):
+        res = ''
+        if num == 0:
+            return 'Zero'
+        elif num < 0:
+            res = '负'
+        num = abs(num)
+        high_pos1 = int(num / 100000000)
+        if high_pos1 > 0:
+            res += (cls.num0to99(high_pos1) + '亿')
+            num -= high_pos1 * 100000000
+
+        high_pos2 = int(num/10000)
+        if 0 < high_pos2 < 1000 and high_pos1 > 0:
+            res += '零'
+        res += cls.num0to99999999(num)
+
+        return res
+
+
 if __name__ == '__main__':
-    print(Number2StrEn.numtoen(0))
-    print(Number2StrEn.numtoen(23))
-    print(Number2StrEn.numtoen(233))
-    print(Number2StrEn.numtoen(1239406328))
+    # print(Number2StrEn.numtoen(0))
+    # print(Number2StrEn.numtoen(23))
+    # print(Number2StrEn.numtoen(233))
+    # print(Number2StrEn.numtoen(1239406328))
+    print(Number2StrZH.numtozh(1239406328))
 
