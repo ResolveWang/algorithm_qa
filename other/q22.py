@@ -63,6 +63,63 @@ class CandyProblem:
         n = end - start + 1
         return int((n*(n+1))/2)
 
+    @classmethod
+    def fair_assign(cls, arr):
+        if not arr:
+            return 0
+        index = cls.get_next_min_strict(arr, 0)
+        res, rbase = cls.get_candies_and_bases(arr, 0, index)
+        index += 1
+        same = 1
+        lbase = 1
+        while index != len(arr):
+            if arr[index] > arr[index-1]:
+                lbase += 1
+                res += lbase
+                index += 1
+                same = 1
+            elif arr[index] < arr[index-1]:
+                next_index = cls.get_next_min_strict(arr, index-1)
+                candies, rbase = cls.get_candies_and_bases(arr, index-1, next_index)
+                if rbase <= lbase:
+                    res += (candies - rbase)
+                else:
+                    res += candies - lbase * same - rbase + rbase * same
+                next_index += 1
+                lbase = 1
+                index = next_index
+                same = 1
+            else:
+                index += 1
+                res += lbase
+                same += 1
+
+        return res
+
+    @classmethod
+    def get_next_min_strict(cls, arr, index):
+        while index != len(arr) - 1:
+            if arr[index] < arr[index+1]:
+                return index
+            index += 1
+        return index
+
+    @classmethod
+    def get_candies_and_bases(cls, arr, start, end):
+        base = 1
+        candies = 1
+        index = end - 1
+        while index >= start:
+            if arr[index] == arr[index+1]:
+                candies += base
+            else:
+                base += 1
+                candies += base
+            index -= 1
+
+        return candies, base
+
 
 if __name__ == '__main__':
-    print(CandyProblem.unfair_assign([1, 2, 5, 4,3, 2, 1]))
+    print(CandyProblem.unfair_assign([1, 2, 5, 4, 3, 2, 1]))
+    print(CandyProblem.fair_assign([3, 0, 5, 5, 4, 4, 0]))
