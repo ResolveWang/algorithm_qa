@@ -52,6 +52,7 @@ class KMP:
                     arr[index] = 0
                     index += 1
                 else:
+                    # 和kmp匹配过程一样，也直接往前跳
                     cursor = arr[cursor]
         return arr
 
