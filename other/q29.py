@@ -135,6 +135,82 @@ class TOKTimesPrinter:
                 break
 
 
+class TOPKRecord:
+    def __init__(self, k):
+        self.k = k
+        self.heap = list()
+        self.str_node_map = dict()
+        self.node_index_map = dict()
+
+    def add(self, mystr: str):
+        if mystr not in self.str_node_map:
+            node = HeapNode(mystr, 1)
+            self.str_node_map[mystr] = node
+        else:
+            node = self.str_node_map[mystr]
+            node.times += 1
+
+        pos = self.node_index_map.get(node)
+        if pos is not None and pos != -1:
+            self.heapify(pos)
+        else:
+            if len(self.heap) < self.k:
+                self.heap.append(node)
+                index = len(self.heap) - 1
+                self.node_index_map[node] = index
+                self.heap_insert(index)
+            else:
+                if node.times > self.heap[0].times:
+                    self.heap[0] = node
+                    self.node_index_map[node] = 0
+                    self.heapify(0)
+                else:
+                    self.node_index_map[node] = -1
+
+    def print_top_k(self):
+        print('TOP')
+        for i in self.heap:
+            print('Str:{} Times:{}'.format(i.string, i.times))
+
+    def heapify(self, index):
+        size = len(self.heap)
+        left_index = index * 2 + 1
+        smallest_index = index
+        while left_index < size:
+            if self.heap[smallest_index].times > self.heap[left_index].times:
+                smallest_index = left_index
+            if left_index + 1 < size and self.heap[smallest_index].times > self.heap[left_index+1].times:
+                smallest_index = left_index + 1
+
+            if smallest_index == index:
+                return
+
+            self.swap_two_node(index, smallest_index)
+            index = smallest_index
+            left_index = index * 2 + 1
+
+    def swap_two_node(self, index1, index2):
+        node1 = self.heap[index1]
+        node2 = self.heap[index2]
+        node1, node2 = node2, node1
+        self.node_index_map[node1] = index2
+        self.node_index_map[node2] = index1
+
+    def heap_insert(self, index):
+        parent_index = int((index-1)/2)
+        while index > 0 and self.heap[index].times < self.heap[parent_index].times:
+            self.swap_two_node(index, parent_index)
+            index = parent_index
+
+
 if __name__ == '__main__':
     strs = ['1', '1', '2', '3']
     TOKTimesPrinter.print_top_k(strs, 2)
+
+    record = TOPKRecord(2)
+    record.add('A')
+    record.add('B')
+    record.add('B')
+    record.add('C')
+    record.add('C')
+    record.print_top_k()
