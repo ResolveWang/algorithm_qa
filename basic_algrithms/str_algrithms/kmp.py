@@ -21,7 +21,7 @@ class KMP:
             # 如果是str2的第一个字符
             elif next_arr[str2_index] == -1:
                 str1_index += 1
-            # 如果str1_index和str2_index的位置没配上，那么把next_arr向右滑动str2_index个
+            # 如果str1_index和str2_index的位置没配上，那么把str2向右滑动str2_index个
             # 位置再和str1_index匹配
             else:
                 str2_index = next_arr[str2_index]
@@ -38,7 +38,7 @@ class KMP:
         next_arr[0] = -1
         # 下标当前位置
         pos = 2
-        # 最长前缀的后一个字符的位置
+        # 最长前缀
         cn = 0
 
         while pos < length:
