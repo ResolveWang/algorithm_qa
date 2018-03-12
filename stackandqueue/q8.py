@@ -102,8 +102,48 @@ class MaxTree:
         cls.previsit(tree_node.left)
         cls.previsit(tree_node.right)
 
+    @classmethod
+    def get_max_tree_by_heap(cls, arr):
+        if not arr:
+            return
+        length = len(arr)
+        node_list = list()
+        for i in arr:
+            node_list.append(Node(i))
+
+        for index in range(length):
+            cls.heap_insert(node_list, index)
+
+        for index, node in enumerate(node_list):
+            if node.left is None and index + 1 < length:
+                node.left = node_list[index+1]
+            if node.right is None and index + 2 < length:
+                node.right = node_list[index+2]
+
+        return node_list[0]
+
+    @classmethod
+    def heap_insert(cls, heap, index):
+        flag = False
+        while heap[index].value > heap[int((index-1)/2)].value:
+            flag = True
+            heap[index], heap[int((index-1)/2)] = heap[int((index-1)/2)], heap[index]
+            if (index - 1) % 2 == 0:
+                heap[int((index-1)/2)].left = heap[index]
+            else:
+                heap[int((index-1)/2)].right = heap[index]
+            index = int((index-1)/2)
+
+        if not flag:
+            if (index - 1) % 2 == 0:
+                heap[int((index-1)/2)].left = heap[index]
+            else:
+                heap[int((index-1)/2)].right = heap[index]
+
 
 if __name__ == '__main__':
-    cur_arr = [2, 5, 6, 0, 3, 1 ]
-    cur_head = MaxTree.get_max_tree(cur_arr)
-    MaxTree.previsit(cur_head)
+    cur_arr = [2, 5, 6, 0, 3, 1]
+    # cur_head = MaxTree.get_max_tree(cur_arr)
+    # MaxTree.previsit(cur_head)
+    head = MaxTree.get_max_tree_by_heap(cur_arr)
+    MaxTree.previsit(head)
