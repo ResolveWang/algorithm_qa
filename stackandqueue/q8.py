@@ -108,42 +108,53 @@ class MaxTree:
             return
         length = len(arr)
         node_list = list()
-        for i in arr:
-            node_list.append(Node(i))
+        value_pos = dict()
+        res = [-1 for _ in range(length)]
+        for index, value in enumerate(arr):
+            node_list.append(Node(value))
+            value_pos[value] = index
 
         for index in range(length):
             cls.heap_insert(node_list, index)
 
-        for index, node in enumerate(node_list):
-            if node.left is None and index + 1 < length:
-                node.left = node_list[index+1]
-            if node.right is None and index + 2 < length:
-                node.right = node_list[index+2]
+        cls.get_relation(None, node_list[0], res, value_pos)
 
-        return node_list[0]
+        return res
+
+    @classmethod
+    def get_relation(cls, parent, cur, res, relation_map):
+        if cur is None:
+            return
+        if parent is None:
+            res[relation_map[cur.value]] = -1
+        else:
+            res[relation_map[cur.value]] = relation_map[parent.value]
+        cls.get_relation(cur, cur.left, res, relation_map)
+        cls.get_relation(cur, cur.right, res, relation_map)
 
     @classmethod
     def heap_insert(cls, heap, index):
-        flag = False
-        while heap[index].value > heap[int((index-1)/2)].value:
-            flag = True
-            heap[index], heap[int((index-1)/2)] = heap[int((index-1)/2)], heap[index]
-            if (index - 1) % 2 == 0:
+        if heap[index].value <= heap[int((index-1)/2)].value and index != int((index-1)/2):
+            if heap[int((index-1)/2)].left is None:
                 heap[int((index-1)/2)].left = heap[index]
             else:
                 heap[int((index-1)/2)].right = heap[index]
-            index = int((index-1)/2)
+            return
 
-        if not flag:
-            if (index - 1) % 2 == 0:
+        while heap[index].value > heap[int((index-1)/2)].value:
+            parent_value = heap[int((index-1)/2)].value
+            cur_value = heap[index].value
+            heap[index].value, heap[int((index-1)/2)].value = parent_value, cur_value
+            if heap[int((index-1)/2)].left is None:
                 heap[int((index-1)/2)].left = heap[index]
-            else:
-                heap[int((index-1)/2)].right = heap[index]
+            elif heap[int((index-1)/2)].right is None:
+                heap[int((index - 1) / 2)].right = heap[index]
+            index = int((index-1)/2)
 
 
 if __name__ == '__main__':
-    cur_arr = [2, 5, 6, 0, 3, 1]
-    # cur_head = MaxTree.get_max_tree(cur_arr)
-    # MaxTree.previsit(cur_head)
-    head = MaxTree.get_max_tree_by_heap(cur_arr)
-    MaxTree.previsit(head)
+    cur_arr = [3, 1, 4, 2]
+    cur_head = MaxTree.get_max_tree(cur_arr)
+    MaxTree.previsit(cur_head)
+    res = MaxTree.get_max_tree_by_heap(cur_arr)
+    print(res)
