@@ -25,5 +25,57 @@ N=105, k=2
 若没碎，第一个棋子继续在99层扔，碎了则用仅存的一个棋子试96~98
 若没碎，第一个棋子继续在102层扔，碎了则用仅存的一个棋子试100、101
 若没碎，第一个棋子继续在104层扔，碎了则用仅存的一个棋子试103
-若没碎，第一个棋子继续在10５层扔，若到这一步还没碎，那么105便是结果
+若没碎，第一个棋子继续在105层扔，若到这一步还没碎，那么105便是结果
 """
+import sys
+
+
+class PieceDropProblem:
+    @classmethod
+    def solution_by_recursive(cls, n, k):
+        if n < 1 or k < 1:
+            return 0
+
+        return cls.recursive_solution_detail(n, k)
+
+    @classmethod
+    def recursive_solution_detail(cls, n, k):
+        if n == 0:
+            return 0
+
+        if k == 1:
+            return n
+
+        res = sys.maxsize
+        for i in range(1, n+1):
+            res2 = max(cls.recursive_solution_detail(n-i, k), cls.recursive_solution_detail(i-1, k-1))
+            if res > res2:
+                res = res2
+
+        return res + 1
+
+    @classmethod
+    def solution_by_dp(cls, n, k):
+        if n < 1 or k < 1:
+            return 0
+        if k == 1:
+            return n
+
+        dp = [[0 for _ in range(k+1)] for _ in range(n+1)]
+        for i in range(1, n+1):
+            dp[i][1] = i
+
+        for row in range(1, n+1):
+            for col in range(2, k+1):
+                min_value = sys.maxsize
+                for i in range(1, row+1):
+                    min_value = min([min_value, max(dp[row-i][col], dp[i-1][col-1])])
+
+                dp[row][col] = min_value + 1
+
+        return dp[n][k]
+
+
+if __name__ == '__main__':
+    print(PieceDropProblem.solution_by_recursive(21, 2))
+    print(PieceDropProblem.solution_by_dp(21, 2))
