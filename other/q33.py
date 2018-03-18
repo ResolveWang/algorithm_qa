@@ -26,7 +26,7 @@ class LimnerProblem:
             min_value = 0
             max_value = sum(arr)
             while max_value != min_value + 1:
-                mid = int((min_value + max_value)/2)
+                mid = int((min_value + max_value) / 2)
                 if cls.get_num(arr, mid) > num:
                     min_value = mid
                 else:
@@ -48,6 +48,27 @@ class LimnerProblem:
                 step = i
         return res
 
+    @classmethod
+    def solution_by_dp(cls, arr, num):
+        if not arr or num < 1:
+            return 0
+
+        dp = [[0 for _ in arr] for _ in range(num)]
+        for i, _ in enumerate(arr):
+            dp[0][i] = sum(arr[:i + 1])
+
+        for i in range(1, num):
+            j = 1
+            while j < len(arr):
+                min_value = sys.maxsize
+                for k in range(j):
+                    dp[i][j] = min([max([dp[i-1][k], sum(arr[k+1:j+1])]), min_value])
+                    min_value = dp[i][j]
+                j += 1
+
+        return dp[num-1][len(arr)-1]
+
 
 if __name__ == '__main__':
     print(LimnerProblem.best_solution([1, 1, 1, 4, 3], 3))
+    print(LimnerProblem.solution_by_dp([1, 1, 1, 4, 3], 3))
