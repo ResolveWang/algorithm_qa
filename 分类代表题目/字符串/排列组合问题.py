@@ -10,6 +10,7 @@ class Solution:
         return res
 
     def pick_n_from_str(self, input_str, pre_str, n, res):
+        # f(n, m) = f(n-1, m-1) + f(n-1, m)
         if len(pre_str) == n:
             res.append(pre_str)
             return
