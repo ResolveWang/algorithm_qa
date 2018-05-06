@@ -24,6 +24,7 @@ class Solution(object):
     def ladderLength(self, beginWord, endWord, wordList):
         queue = collections.deque([(beginWord, 1)])
         wordList = set(wordList)
+        # 直接穷举所有字母，常数复杂度
         ls = string.ascii_lowercase
         visited = set()
         while queue:
@@ -36,5 +37,44 @@ class Solution(object):
                         newWord = word[:i] + j + word[i + 1:]
                         if newWord not in visited and newWord in wordList:
                             queue.append((newWord, dist + 1))
-                            visited.add(newWord)  # wordList.remove(newWord)
+                            visited.add(newWord)
         return 0
+
+    def ladderLength2(self, beginWord, endWord, wordList):
+        # 预处理字典技巧
+        def construct_dict(word_list):
+            d = {}
+            for word in word_list:
+                for i in range(len(word)):
+                    s = word[:i] + "_" + word[i + 1:]
+                    d[s] = d.get(s, []) + [word]
+            print(d)
+            return d
+
+        def bfs_words(begin, end, dict_words):
+            queue, visited = collections.deque([(begin, 1)]), set()
+            while queue:
+                word, steps = queue.popleft()
+                if word not in visited:
+                    visited.add(word)
+                    if word == end:
+                        return steps
+                    for i in range(len(word)):
+                        s = word[:i] + "_" + word[i + 1:]
+                        neigh_words = dict_words.get(s, [])
+                        for neigh in neigh_words:
+                            if neigh not in visited:
+                                queue.append((neigh, steps + 1))
+            return 0
+
+        d = construct_dict(wordList | {beginWord, endWord})
+        return bfs_words(beginWord, endWord, d)
+
+
+if __name__ == '__main__':
+    begin = "hit"
+    end = "cog"
+    words = ["hot", "dot", "dog", "lot", "log", "cog"]
+    solution = Solution()
+    r = solution.ladderLength2(begin, end, set(words))
+    print(r)
