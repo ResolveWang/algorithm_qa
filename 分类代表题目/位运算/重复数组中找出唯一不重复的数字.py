@@ -37,5 +37,5 @@ class Solution:
 
 if __name__ == '__main__':
     s = Solution()
-    array = [-2]
+    array = [-2, 3, 3, 3]
     print(s.singleNumber(array))
