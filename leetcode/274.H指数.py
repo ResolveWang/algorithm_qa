@@ -7,3 +7,33 @@ h 指数的定义: “一位有 h 指数的学者，代表他（她）的 N 篇�
 输入: citations = [3,0,6,1,5]
 输出: 3
 """
+
+
+class Solution:
+    def hIndex(self, citations):
+        """
+        :type citations: List[int]
+        :rtype: int
+        """
+        if not citations:
+            return 0
+
+        if len(citations) == 1:
+            if citations[0] > 0:
+                return 1
+            else:
+                return 0
+
+        citations.sort(reverse=True)
+        index = 1
+        while index <= len(citations):
+            if index < len(citations):
+                if citations[index] <= index <= citations[index - 1]:
+                    return index
+            elif index == len(citations):
+                if citations[index - 1] >= index:
+                    return index
+
+            index += 1
+
+        return 0
