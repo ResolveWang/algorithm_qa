@@ -25,6 +25,7 @@ class Solution:
         self.height = 0
 
     def get_max_height(self, n, heights):
+        # 排序过后从最高的砖块开始拿
         heights.sort()
         sums = [0] * len(heights)
         for i in range(len(heights)):
@@ -42,17 +43,24 @@ class Solution:
         if low == high:
             self.height = max([low, self.height])
 
+        # 剪枝过程参考　https://blog.mythsman.com/2017/03/31/1/#堆砖块
+        # 递归完成
         if n < 0:
             return
-        if low > self.max_height:
+        # 高的一边比题目给的大
+        if high > self.max_height:
             return
+        # 矮的加剩下的比高的小
         if low+sums[n] < high:
             return
+        # 高的和矮的加剩下的不大于已知的方案
         if low+high+sums[n] <= self.height*2:
             return
 
+        # 砖块放矮的一边，注意加了一块砖之后AB塔高矮可能发生变化
         self.process(n - 1, min([low+heights[n], high]), max([low+heights[n], high]), sums, heights)
-        self.process(n - 1, min([high+heights[n], low]), max([high+heights[n], low]), sums, heights)
+        # 砖块如果放高的一边或者丢弃，那么AB塔相对高矮程度不会变化
+        self.process(n - 1, low, high+heights[n], sums, heights)
         self.process(n - 1, low, high, sums, heights)
 
 
